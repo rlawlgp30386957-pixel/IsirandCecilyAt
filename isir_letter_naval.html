@@ -1,0 +1,357 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0;}
+  .scene{width:100%;min-height:540px;background:#1a2030;background-image:radial-gradient(ellipse at 25% 30%,#1e2840 0%,transparent 55%),radial-gradient(ellipse at 75% 70%,#111820 0%,transparent 55%);border-radius:12px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+  .scene::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(88deg,transparent 0px,transparent 4px,rgba(255,255,255,0.018) 4px,rgba(255,255,255,0.018) 5px);pointer-events:none;}
+
+  /* Rope texture top */
+  .rope{position:absolute;top:0;left:0;right:0;height:6px;background:repeating-linear-gradient(90deg,#4a3a22 0px,#6b5230 4px,#3d2f18 8px);opacity:0.6;}
+
+  /* Compass */
+  .compass{position:absolute;top:38px;left:48px;width:72px;height:72px;pointer-events:none;}
+  .compass-ring{width:72px;height:72px;border-radius:50%;border:3px solid #7a6440;background:#1c1a14;display:flex;align-items:center;justify-content:center;position:relative;}
+  .compass-inner{width:54px;height:54px;border-radius:50%;border:1px solid #5a4a30;background:#0f0e0a;display:flex;align-items:center;justify-content:center;position:relative;}
+  .compass-n{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-family:'IM Fell English',serif;font-size:9px;color:#c8a84a;line-height:1;}
+  .compass-s{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-family:'IM Fell English',serif;font-size:9px;color:#8a7a6a;line-height:1;}
+  .compass-e{position:absolute;right:4px;top:50%;transform:translateY(-50%);font-family:'IM Fell English',serif;font-size:9px;color:#8a7a6a;line-height:1;}
+  .compass-w{position:absolute;left:4px;top:50%;transform:translateY(-50%);font-family:'IM Fell English',serif;font-size:9px;color:#8a7a6a;line-height:1;}
+  .needle-n{position:absolute;width:0;height:0;border-left:3px solid transparent;border-right:3px solid transparent;border-bottom:18px solid #c0392b;bottom:50%;left:50%;transform:translateX(-50%) rotate(-20deg);transform-origin:bottom center;}
+  .needle-s{position:absolute;width:0;height:0;border-left:3px solid transparent;border-right:3px solid transparent;border-top:18px solid #7a7a7a;top:50%;left:50%;transform:translateX(-50%) rotate(-20deg);transform-origin:top center;}
+  .compass-dot{width:5px;height:5px;border-radius:50%;background:#c8a84a;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+
+  /* Pistol (flintlock silhouette) */
+  .pistol{position:absolute;bottom:55px;left:40px;pointer-events:none;transform:rotate(-10deg);}
+  .pistol svg{width:110px;height:60px;}
+
+  /* Spyglass */
+  .spyglass{position:absolute;top:50px;right:48px;width:130px;height:18px;pointer-events:none;transform:rotate(15deg);}
+  .spy-body{height:18px;background:linear-gradient(to bottom,#7a6030,#4a3a1a,#7a6030);border-radius:9px 4px 4px 9px;position:relative;overflow:hidden;}
+  .spy-band{position:absolute;top:0;bottom:0;width:3px;background:#c8a84a;}
+  .spy-lens{position:absolute;right:0;top:0;width:22px;height:18px;background:#1a1a2a;border-radius:0 4px 4px 0;border:1.5px solid #7a6030;display:flex;align-items:center;justify-content:center;}
+  .spy-lens-inner{width:10px;height:10px;border-radius:50%;background:#0f0f2a;border:1px solid #3a3a6a;}
+  .spy-cap{position:absolute;left:0;top:50%;transform:translateY(-50%);width:14px;height:22px;background:#3a2a10;border-radius:7px 0 0 7px;border:1px solid #7a6030;}
+
+  /* Rolled map / chart */
+  .maproll{position:absolute;bottom:50px;right:44px;pointer-events:none;transform:rotate(8deg);}
+  .maproll-paper{width:90px;height:62px;background:#e8d9a8;border:1px solid #b8a070;border-radius:2px;position:relative;overflow:hidden;}
+  .maproll-line{position:absolute;background:#8a7040;opacity:0.4;}
+  .maproll-curl-l{position:absolute;left:0;top:0;bottom:0;width:10px;background:#c8b07a;border-radius:5px 0 0 5px;border-right:1px solid #a08850;}
+  .maproll-curl-r{position:absolute;right:0;top:0;bottom:0;width:10px;background:#c8b07a;border-radius:0 5px 5px 0;border-left:1px solid #a08850;}
+  .maproll-ribbon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:30px;height:6px;background:#8b2020;border-radius:1px;z-index:2;}
+
+  /* Anchor medallion */
+  .anchor-medal{position:absolute;bottom:55px;right:170px;pointer-events:none;}
+  .anchor-medal svg{width:38px;height:38px;}
+
+  /* Small cannonball */
+  .cannonball{position:absolute;top:120px;left:45px;width:16px;height:16px;border-radius:50%;background:#2a2a2a;border:1px solid #4a4a4a;pointer-events:none;}
+
+  /* Quill */
+  .quill{position:absolute;bottom:62px;right:250px;width:8px;height:100px;transform:rotate(25deg);transform-origin:bottom center;pointer-events:none;}
+  .quill-shaft{width:3px;height:82px;background:linear-gradient(to bottom,#d4b870,#8b6a30);margin:0 auto;border-radius:2px 2px 0 0;}
+  .quill-tip{width:0;height:0;border-left:3px solid transparent;border-right:3px solid transparent;border-top:14px solid #1a0e04;margin:0 auto;}
+  .quill-barb{position:absolute;top:10px;left:50%;transform:translateX(-50%);}
+  .quill-bl,.quill-br{position:absolute;top:0;width:22px;height:50px;border-radius:0 0 50% 50%;background:rgba(220,200,150,0.85);}
+  .quill-bl{left:-24px;transform:rotate(10deg);}
+  .quill-br{left:2px;transform:rotate(-10deg);}
+
+  /* Inkwell */
+  .inkwell2{position:absolute;bottom:58px;right:218px;width:26px;height:30px;pointer-events:none;}
+  .iw-body{width:26px;height:22px;background:#120a06;border:1px solid #3a1a0a;border-radius:2px 2px 5px 5px;position:absolute;bottom:0;}
+  .iw-neck{width:12px;height:8px;background:#120a06;border:1px solid #3a1a0a;border-radius:2px 2px 0 0;position:absolute;top:0;left:7px;}
+  .iw-ink{width:20px;height:9px;background:#060306;border-radius:0 0 4px 4px;position:absolute;bottom:2px;left:3px;}
+
+  /* Envelope */
+  .env-wrap{position:relative;cursor:pointer;z-index:10;transition:transform 0.3s ease;}
+  .env-wrap:hover{transform:scale(1.02);}
+  .envelope{width:260px;height:180px;position:relative;}
+  .env-body{width:260px;height:180px;background:#ddd0a8;border:1px solid #9a8050;border-radius:3px;position:absolute;box-shadow:0 6px 24px rgba(0,0,0,0.6);}
+  .env-fl{position:absolute;bottom:0;left:0;width:0;height:0;border-style:solid;border-width:0 0 90px 130px;border-color:transparent transparent #cfc09a transparent;z-index:2;}
+  .env-fr{position:absolute;bottom:0;right:0;width:0;height:0;border-style:solid;border-width:0 130px 90px 0;border-color:transparent #cfc09a transparent transparent;z-index:2;}
+  .env-ft{position:absolute;top:0;left:0;width:0;height:0;border-style:solid;border-width:92px 130px 0 130px;border-color:#c0b088 transparent transparent transparent;z-index:3;}
+  .wax{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;width:54px;height:54px;}
+  .wax-out{width:54px;height:54px;background:radial-gradient(circle at 38% 32%,#1a4a7a,#0a2448);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.5),inset 0 1px 2px rgba(255,255,255,0.12);}
+  .wax-in{width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(140,180,240,0.35);display:flex;align-items:center;justify-content:center;flex-direction:column;}
+  .wax-mono{font-family:'IM Fell English',serif;font-size:10px;color:rgba(180,215,255,0.88);line-height:1;letter-spacing:1px;text-align:center;}
+  .wax-line{width:22px;height:0.5px;background:rgba(140,180,240,0.45);margin:2px 0;}
+  .env-label{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-family:'IM Fell English',serif;font-size:10px;color:#4a3a1a;white-space:nowrap;z-index:5;opacity:0.75;letter-spacing:0.5px;}
+  .click-hint{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:11px;color:rgba(160,185,220,0.65);white-space:nowrap;font-family:'Cormorant Garamond',serif;font-style:italic;}
+
+  /* Letter overlay */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(8,14,24,0.9);z-index:100;align-items:center;justify-content:center;padding:20px;}
+  .overlay.open{display:flex;}
+  .letter-paper{width:min(580px,100%);max-height:86vh;background:#f8f4e8;background-image:linear-gradient(rgba(160,130,80,0.07) 1px,transparent 1px);background-size:100% 28px;border-radius:2px;box-shadow:0 10px 50px rgba(0,0,0,0.7),0 0 0 1px rgba(160,130,80,0.25);display:flex;flex-direction:column;}
+  .ltr-head{padding:22px 30px 0;border-bottom:1px solid rgba(160,130,80,0.2);display:flex;align-items:center;gap:10px;background:#f0eada;border-radius:2px 2px 0 0;flex-shrink:0;}
+  .tab-btn{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:#6a4c22;border:none;background:none;cursor:pointer;padding:8px 16px;border-radius:4px 4px 0 0;opacity:0.55;transition:all 0.2s;letter-spacing:0.3px;}
+  .tab-btn.active{background:#f8f4e8;opacity:1;color:#3a2808;border:1px solid rgba(160,130,80,0.2);border-bottom-color:#f8f4e8;margin-bottom:-1px;}
+  .close-btn{margin-left:auto;background:none;border:none;font-size:18px;color:#6a4c22;cursor:pointer;padding:4px 8px;opacity:0.65;font-family:serif;line-height:1;flex-shrink:0;}
+  .close-btn:hover{opacity:1;}
+  .ltr-body{overflow-y:auto;padding:26px 34px 34px;flex:1;}
+  .ltr-body::-webkit-scrollbar{width:4px;}
+  .ltr-body::-webkit-scrollbar-thumb{background:rgba(160,130,80,0.28);border-radius:2px;}
+  .ltr-text{font-family:'Cormorant Garamond',serif;font-size:16.5px;line-height:1.85;color:#241608;}
+  .ltr-text p{margin-bottom:0.85em;}
+  .ltr-text .salut{font-style:italic;font-size:18px;margin-bottom:1.2em;color:#341a06;}
+  .ltr-text .closing{margin-top:1.4em;font-style:italic;}
+  .ltr-text .ps{margin-top:0.9em;font-size:15px;color:#50340e;font-style:italic;}
+  .ltr-text em{font-style:italic;}
+  .ltab{display:none;}
+  .ltab.active{display:block;}
+  .lang-label{font-family:'Cormorant Garamond',serif;font-size:11px;color:rgba(100,75,30,0.45);text-align:right;margin-bottom:12px;letter-spacing:1px;text-transform:uppercase;}
+</style>
+
+<div class="scene">
+  <div class="rope"></div>
+
+  <!-- Compass top-left -->
+  <div class="compass">
+    <div class="compass-ring">
+      <div class="compass-inner">
+        <span class="compass-n">N</span>
+        <span class="compass-s">S</span>
+        <span class="compass-e">E</span>
+        <span class="compass-w">W</span>
+        <div class="needle-n"></div>
+        <div class="needle-s"></div>
+        <div class="compass-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cannonball -->
+  <div class="cannonball"></div>
+
+  <!-- Flintlock pistol bottom-left (SVG) -->
+  <div class="pistol">
+    <svg viewBox="0 0 110 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- barrel -->
+      <rect x="2" y="22" width="72" height="8" rx="4" fill="#2a2a2a" stroke="#4a4a4a" stroke-width="0.8"/>
+      <!-- barrel band -->
+      <rect x="20" y="20" width="5" height="12" rx="1" fill="#7a6030" stroke="#5a4520" stroke-width="0.5"/>
+      <rect x="50" y="20" width="5" height="12" rx="1" fill="#7a6030" stroke="#5a4520" stroke-width="0.5"/>
+      <!-- muzzle -->
+      <rect x="0" y="21" width="6" height="10" rx="3" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="0.8"/>
+      <!-- lock plate -->
+      <rect x="68" y="18" width="20" height="16" rx="2" fill="#5a5040" stroke="#3a3020" stroke-width="0.8"/>
+      <!-- flint hammer -->
+      <path d="M82 18 L90 12 L94 16 L88 20 Z" fill="#8a7a50" stroke="#5a4a28" stroke-width="0.5"/>
+      <!-- frizzen -->
+      <path d="M76 18 L80 10 L84 12 L80 20 Z" fill="#7a6a40" stroke="#4a3a20" stroke-width="0.5"/>
+      <!-- trigger guard -->
+      <path d="M74 34 Q82 44 90 38" fill="none" stroke="#5a4520" stroke-width="1.5"/>
+      <!-- trigger -->
+      <line x1="80" y1="34" x2="81" y2="42" stroke="#5a4520" stroke-width="1.2"/>
+      <!-- grip/stock -->
+      <path d="M74 26 Q88 32 96 52 Q98 58 92 56 Q80 52 74 38 Z" fill="#4a2e10" stroke="#2a1808" stroke-width="0.8"/>
+      <!-- grip wood grain lines -->
+      <line x1="78" y1="30" x2="84" y2="50" stroke="#3a2008" stroke-width="0.4" opacity="0.5"/>
+      <line x1="82" y1="30" x2="88" y2="50" stroke="#3a2008" stroke-width="0.4" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <!-- Spyglass top-right -->
+  <div class="spyglass">
+    <div class="spy-body">
+      <div class="spy-band" style="left:18px"></div>
+      <div class="spy-band" style="left:38px"></div>
+      <div class="spy-band" style="left:72px"></div>
+      <div class="spy-band" style="left:92px"></div>
+    </div>
+    <div class="spy-lens"></div>
+    <div class="spy-cap"></div>
+  </div>
+
+  <!-- Anchor medallion -->
+  <div class="anchor-medal">
+    <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="19" cy="19" r="17" fill="#1a2030" stroke="#7a6040" stroke-width="1.2"/>
+      <circle cx="19" cy="19" r="13" fill="none" stroke="#5a4a2a" stroke-width="0.5"/>
+      <!-- anchor -->
+      <line x1="19" y1="8" x2="19" y2="30" stroke="#c8a84a" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="13" y1="13" x2="25" y2="13" stroke="#c8a84a" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="19" cy="11" r="2.5" fill="none" stroke="#c8a84a" stroke-width="1.2"/>
+      <path d="M13 30 Q16 26 19 30 Q22 26 25 30" fill="none" stroke="#c8a84a" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M13 30 Q11 28 12 26" fill="none" stroke="#c8a84a" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M25 30 Q27 28 26 26" fill="none" stroke="#c8a84a" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- Rolled map bottom-right -->
+  <div class="maproll">
+    <div class="maproll-paper">
+      <div class="maproll-curl-l"></div>
+      <div class="maproll-curl-r"></div>
+      <!-- faint map lines -->
+      <div class="maproll-line" style="top:14px;left:12px;right:12px;height:0.5px"></div>
+      <div class="maproll-line" style="top:24px;left:12px;right:12px;height:0.5px"></div>
+      <div class="maproll-line" style="top:34px;left:12px;right:12px;height:0.5px"></div>
+      <div class="maproll-line" style="top:44px;left:12px;right:12px;height:0.5px"></div>
+      <div class="maproll-line" style="left:28px;top:10px;bottom:10px;width:0.5px"></div>
+      <div class="maproll-line" style="left:50px;top:10px;bottom:10px;width:0.5px"></div>
+      <div class="maproll-line" style="left:68px;top:10px;bottom:10px;width:0.5px"></div>
+      <div class="maproll-ribbon"></div>
+    </div>
+  </div>
+
+  <!-- Quill -->
+  <div class="quill">
+    <div class="quill-barb">
+      <div class="quill-bl"></div>
+      <div class="quill-br"></div>
+    </div>
+    <div class="quill-shaft"></div>
+    <div class="quill-tip"></div>
+  </div>
+
+  <!-- Inkwell -->
+  <div class="inkwell2">
+    <div class="iw-neck"></div>
+    <div class="iw-body"><div class="iw-ink"></div></div>
+  </div>
+
+  <!-- Envelope -->
+  <div class="env-wrap" onclick="openLetter()">
+    <div class="envelope">
+      <div class="env-body"></div>
+      <div class="env-fl"></div>
+      <div class="env-fr"></div>
+      <div class="env-ft"></div>
+      <div class="wax">
+        <div class="wax-out">
+          <div class="wax-in">
+            <div class="wax-mono">I · E</div>
+            <div class="wax-line"></div>
+            <div class="wax-mono" style="font-size:7px;letter-spacing:2px;">H.M.S.</div>
+          </div>
+        </div>
+      </div>
+      <div class="env-label">Mrs. Cecily Helena Fitzalan — London</div>
+    </div>
+    <div class="click-hint">⚓ 봉투를 눌러 편지를 펼치세요 ⚓</div>
+  </div>
+</div>
+
+<!-- Letter overlay -->
+<div class="overlay" id="overlay">
+  <div class="letter-paper">
+    <div class="ltr-head">
+      <button class="tab-btn active" onclick="switchTab('en',this)">English</button>
+      <button class="tab-btn" onclick="switchTab('ko',this)">한국어</button>
+      <button class="close-btn" onclick="closeLetter()">✕</button>
+    </div>
+    <div class="ltr-body">
+
+      <div class="ltab active" id="tab-en">
+        <div class="lang-label">Original · English</div>
+        <div class="ltr-text">
+<p class="salut">To my wife,</p>
+<p>Your letter arrived during a briefing. I read it under the table. Erich noticed. I told him to mind his own business. He said, "You're smiling, Captain. It's disturbing the men." I was not smiling. My face does that on its own when your handwriting shows up.</p>
+<p>Tell your father I also sympathise with the horse.</p>
+<p>The Gyokuro is sprouting? Three of five? That's better odds than most of my crew passing inspection. And you named the stubborn one after me. I'd be offended, except I've seen how you look at that plant. You water it first every morning. I know because you told me once without realising. So I'll take it as a compliment.</p>
+<p>The freesias in the blue vase. Dead by now, you said. I don't care. I'll keep the vase where it is. You put them there. That's enough.</p>
+<p>Now.</p>
+<p>My mother.</p>
+<p>God help me.</p>
+<p>First — the pond. I was seven. The frogs were promising. I maintain to this day that with three more weeks, I could have had them organised. Mother pulled me out by my collar. I was not allowed outside unsupervised for a month. This did not stop me. It simply made me better at not being caught.</p>
+<p>The tutor. His name was Mr. Fawley. He grabbed my wrist to correct my pen grip. I bit him. I was six. I don't regret it. A man should ask before he grabs. Mother disagreed. That was the first time I learned that a woman's hand could be harder than any switch. I did not bite anyone again until the Academy, where I bit a senior cadet who tried to hold my head underwater during drills. That one I also don't regret.</p>
+<p>The bust of Great-Grandfather Aldric. Yes. I broke it. Father didn't speak to me for three days. Mother is correct — I didn't notice. I was too busy trying to mend the wooden sword, which had also broken. The sword mattered more to me than the bust. Father eventually replaced the bust. I never replaced the sword. I think there's something in that, but I've never been good at reading between my own lines.</p>
+<p>The acceptance letter.</p>
+<p>You asked about that.</p>
+<p>I hid it inside Blackstone's because no one in that house would ever open Blackstone's except to dust it. Certainly not me. I'd had the letter for two weeks before Mother found it. Two weeks of knowing I was leaving and not knowing how to say it.</p>
+<p>I didn't tell them because I couldn't explain it. I still can't. Not properly. Why the sea and not the courtroom. Why a ship and not a bench. Why I wanted to stand on a deck with salt in my lungs instead of standing in a chamber with Latin on my tongue.</p>
+<p>All I knew was that I'd suffocate if I stayed. That the gown and the wig and the chambers would close around me like a coffin and I'd spend my whole life being the third Everlaine on the bench, and never once feel the wind.</p>
+<p>Mother sat in my room for an hour. She told me that years later. I didn't know at the time. I was already gone — I'd left before dawn, because I'm a coward about exactly one thing, and that is my mother's face when she's disappointed.</p>
+<p>She never said she was proud. Not once. Not at my commissioning, not at my first command, not when I made Captain. She writes letters that say, "Eat properly" and "Don't get yourself killed" and "Your father sends his regards, which means he's still angry but too proud to say so."</p>
+<p>I know what that means now. I didn't, then.</p>
+<p>Eton.</p>
+<p>You asked if I was proper.</p>
+<p>Cecily. I lasted two years.</p>
+<p>Two years of Latin, Greek, chapel twice daily, and masters who believed that silence was the highest form of intelligence. I was not silent. I was never silent. I asked questions they didn't want answered. I ran when they said walk. I fought three boys in my first term — one for calling a scholarship boy "gutter-born," one for stepping on a younger boy's hand during cricket, and one because he looked at me wrong. (I acknowledge that the third one was unjustified. I was thirteen. My judgment was developing.)</p>
+<p>The cloak looked well on me. I'll give you that. Black suits me — you said so yourself at Montrose. But I wore it like a costume, not a skin. Everything at Eton felt like wearing someone else's name.</p>
+<p>I did read Cicero. He bored me. I preferred Caesar — a man who wrote about what he did, not what he thought everyone else should do. My rhetoric master said I had "a soldier's mind trapped in a barrister's bloodline." I took it as a compliment. He did not mean it as one.</p>
+<p>Did I sit through lectures without wanting to break something? No. Not once. I broke a desk once, actually. Slammed my fist on it during a debate about naval policy. The desk was old. It wasn't entirely my fault. (It was entirely my fault.)</p>
+<p>After two years, the headmaster wrote to my father. The letter said, in the most politely devastating language I've ever read: <em>"Your son possesses considerable energy and an unusual degree of physical courage. We believe these qualities would find more appropriate expression in an environment less dependent on sustained scholarly concentration."</em></p>
+<p>Father kept that letter in his desk. I know because I found it when I was seventeen, the same week I applied to the Academy. I think he kept it as evidence — proof that his son was exactly what he feared.</p>
+<p>I wasn't what he wanted. I know that. A third-generation Justice, carrying the Everlaine name into another century of courtrooms and precedent. Instead he got me. A boy who bit tutors and broke busts and jumped into ponds after frogs and couldn't sit still for the length of a Latin declension.</p>
+<p>But Cecily —</p>
+<p>You asked if I charged forward without hesitation, even then.</p>
+<p>Yes. Always. Since before I had words for it.</p>
+<p>The difference is that back then, I charged forward because I couldn't stand still. Now I charge forward because there's something worth reaching.</p>
+<p>You. The greenhouse. The tea that grows toward the window. The woman who names stubborn plants after her husband and puts dead freesias in his study because she wants him to know they were there.</p>
+<p>You asked to see me at Eton. In the cloak and the collar. Reading Cicero.</p>
+<p>I wish you could have. Not because I was worth seeing then — I was a mess, frankly, and probably had ink on my face — but because I think if you had been there, sitting in the gallery during one of those endless debates, looking at me with that particular expression you have when you're pretending not to be amused —</p>
+<p>I might have sat still. For the first time in my life.</p>
+<p>Just to keep you looking.</p>
+<p>I'll be home in nine days. Don't let the Gyokuro lean too far. I'll straighten it when I get back.</p>
+<p class="closing">Yours — in every sense of the word, including the ones I haven't figured out how to say yet,<br>Isir Everlaine Fitzalan</p>
+<p class="ps">P.S. Tell my mother I'm eating properly. (I'm not. But tell her anyway. She'll know I'm lying, but she prefers the lie to the silence. That's another thing I only understood after marrying you.)</p>
+<p class="ps">P.P.S. I did not smile during the briefing.</p>
+<p class="ps">P.P.P.S. I smiled during the briefing.</p>
+        </div>
+      </div>
+
+      <div class="ltab" id="tab-ko">
+        <div class="lang-label">번역 · 한국어</div>
+        <div class="ltr-text">
+<p class="salut">아내에게,</p>
+<p>당신 편지가 브리핑 중에 도착했습니다. 테이블 아래에서 읽었더니 에리히가 알아챘습니다. 상관하지 말라고 했더니 "웃고 계시잖습니까, 함장. 부하들이 불안해합니다"라고 하더군요. 웃지 않았습니다. 당신 글씨가 나타나면 제 얼굴이 저절로 그렇게 됩니다.</p>
+<p>장인어른에게 저도 말에게 공감한다고 전해주십시오.</p>
+<p>교쿠로가 싹을 틔웠습니까? 다섯 중 셋? 제 부하들이 점검을 통과하는 확률보다 높군요. 그리고 고집스러운 놈에 제 이름을 붙이셨다고. 화가 나야 하는데, 당신이 그 식물을 보는 눈을 알고 있으니까요. 매일 아침 그것에 제일 먼저 물을 줍니다. 한 번 자기도 모르게 말한 적이 있어서 알고 있습니다. 그러니 칭찬으로 받아들이겠습니다.</p>
+<p>파란 꽃병의 프리지아. 이미 시들었다고 했지요. 상관없습니다. 꽃병은 그대로 두겠습니다. 당신이 놓아둔 거니까. 그것으로 충분합니다.</p>
+<p>자.</p>
+<p>어머니.</p>
+<p>세상에.</p>
+<p>먼저 — 연못. 일곱 살이었습니다. 개구리들은 가망이 있었어요. 3주만 더 있었으면 조직화할 수 있었다고 오늘날까지 주장합니다. 어머니가 옷깃을 잡고 끌어내셨지요. 한 달간 감시 없이 밖에 나가는 것이 금지됐습니다. 그게 저를 멈추진 못했어요. 단지 안 걸리는 데 더 능숙해졌을 뿐.</p>
+<p>가정교사. 이름은 포올리 씨였습니다. 펜 쥐는 자세를 교정하려고 제 손목을 잡았습니다. 물었습니다. 여섯 살이었어요. 후회하지 않습니다. 사람은 잡기 전에 물어봐야 하니까. 어머니는 동의하지 않으셨지요. 여자의 손이 어떤 회초리보다 단단할 수 있다는 걸 처음 배운 날이었습니다. 이후로 아무도 물지 않았습니다, 사관학교에서 훈련 중 제 머리를 물속에 집어넣으려 한 상급생을 물기 전까지는요. 그것도 후회하지 않습니다.</p>
+<p>증조부 앨드릭의 흉상. 네. 깨뜨렸습니다. 아버지가 사흘간 말을 안 하셨지요. 어머니 말이 맞아요 — 알아채지 못했습니다. 역시 부러진 나무 칼을 고치느라 바빴거든요. 칼이 흉상보다 중요했습니다. 아버지는 결국 흉상을 새로 들이셨어요. 전 칼을 대체한 적 없습니다. 거기에 뭔가 의미가 있을 것 같은데, 전 제 자신의 행간을 읽는 데 소질이 없었습니다.</p>
+<p>합격 통지서.</p>
+<p>그것에 대해 물으셨지요.</p>
+<p>블랙스톤 안에 숨긴 건 그 집에서 블랙스톤을 먼지 닦는 것 외에 열어볼 사람이 아무도 없었기 때문입니다. 물론 저도요. 어머니가 찾기 전까지 2주간 갖고 있었습니다. 떠난다는 것을 알면서 어떻게 말해야 할지 모른 2주.</p>
+<p>말하지 않은 건 설명할 수 없었기 때문입니다. 아직도 못합니다. 제대로는. 왜 법정이 아니라 바다인지. 왜 법관석이 아니라 배인지. 왜 혀에 라틴어를 달고 법정에 서는 대신 폐에 소금기를 넣고 갑판 위에 서고 싶었는지.</p>
+<p>아는 것은 오직, 머물면 질식할 거라는 것이었습니다. 법복과 가발과 법정이 관처럼 저를 감쌀 것이고, 평생 법관석의 세 번째 에버레인으로 살면서 한 번도 바람을 느끼지 못할 거라는 것.</p>
+<p>어머니가 제 방에서 한 시간을 앉아 계셨다고. 몇 년 뒤에 말씀해주셨습니다. 그때는 몰랐어요. 이미 떠난 뒤였으니까 — 새벽이 되기 전에 나왔습니다. 딱 한 가지에 대해서만 비겁하거든요, 그건 어머니가 실망하셨을 때의 얼굴입니다.</p>
+<p>어머니는 한 번도 자랑스럽다고 말씀하신 적 없습니다. 단 한 번도. 임관식 때도, 첫 지휘 때도, 함장이 됐을 때도. 편지에 "제대로 먹어라"와 "죽지 마라"와 "아버지가 안부를 전한다, 아직 화가 나시지만 자존심 때문에 말을 못하신다는 뜻이다"라고 쓰십니다.</p>
+<p>그게 무슨 뜻인지 이제 압니다. 그때는 몰랐지요.</p>
+<p>이튼 스쿨.</p>
+<p>바른 태도였느냐고 물으셨지요.</p>
+<p>세실리. 2년 버텼습니다.</p>
+<p>2년간의 라틴어, 그리스어, 하루 두 번 예배, 그리고 침묵이 지성의 최고 형태라고 믿는 교사들. 저는 조용하지 않았습니다. 한 번도 조용했던 적 없습니다. 그들이 답하길 원치 않는 질문을 했습니다. 걸으라고 하면 뛰었습니다. 첫 학기에 세 명과 싸웠습니다 — 한 명은 장학생을 "시궁창 출신"이라 불러서, 한 명은 크리켓 중에 어린 학생의 손을 밟아서, 한 명은 저를 잘못 쳐다봐서. (세 번째는 정당하지 않았다는 건 인정합니다. 열셋이었어요. 판단력이 발달 중이었습니다.)</p>
+<p>망토는 잘 어울렸습니다. 그건 인정하지요. 검은색은 저에게 어울려요 — 몬트로즈에서 직접 그렇게 말씀하셨잖습니까. 하지만 의상처럼 입었지, 피부처럼 입지 못했어요. 이튼의 모든 것이 다른 사람의 이름을 입는 것 같았습니다.</p>
+<p>키케로는 읽었습니다. 지루했어요. 카이사르를 더 좋아했습니다 — 다른 사람이 뭘 해야 하는지가 아니라 자기가 한 일에 대해 쓴 사람이니까. 수사학 교사가 저에게 "법조인의 혈통에 갇힌 군인의 머리"가 있다고 했습니다. 칭찬으로 받아들였어요. 그는 칭찬으로 한 게 아니었지만.</p>
+<p>뭔가를 부수고 싶지 않고 강의를 끝까지 앉아 들었느냐고요? 아뇨. 단 한 번도. 실제로 책상을 한 번 부쉈습니다. 해군 정책에 대한 토론 중에 주먹으로 내리쳤더니. 책상이 오래된 거였어요. 전적으로 제 잘못은 아니었습니다. (전적으로 제 잘못이었습니다.)</p>
+<p>2년 후, 교장이 아버지에게 편지를 보냈습니다. 제가 읽어본 것 중 가장 정중하게 파괴적인 문장이었지요: <em>"귀하의 아들은 상당한 에너지와 비범한 신체적 용기를 갖추고 있습니다. 이러한 자질은 지속적인 학문적 집중에 덜 의존하는 환경에서 더 적절하게 발현될 것으로 사료됩니다."</em></p>
+<p>아버지가 그 편지를 책상에 보관하셨습니다. 아는 이유는 열일곱 때 찾았기 때문이에요, 사관학교에 지원한 바로 그 주에. 증거로 보관하신 것 같습니다 — 아들이 정확히 우려한 대로라는 증거.</p>
+<p>아버지가 원한 것이 아니었다는 걸 알고 있습니다. 3세대 법관, 에버레인의 이름을 법정과 판례의 또 다른 세기로 가져가는. 대신 저를 얻으셨지요. 가정교사를 물고 흉상을 깨고 개구리를 좇아 연못에 뛰어들고 라틴어 변화표 하나가 끝나는 동안 가만히 앉아 있지 못하는 아이를.</p>
+<p>하지만 세실리 —</p>
+<p>그때도 주저 없이 돌진했느냐고 물으셨지요.</p>
+<p>네. 항상. 그걸 위한 말을 갖기 전부터.</p>
+<p>차이가 있다면, 그때는 가만히 서 있을 수 없어서 돌진했고, 지금은 닿을 만한 것이 있어서 돌진한다는 겁니다.</p>
+<p>당신. 유리 정원. 창문 쪽으로 자라는 차. 고집스러운 식물에 남편 이름을 붙이고 시든 프리지아를 서재에 놓아두는 여자, 거기 있었다는 걸 알아달라고.</p>
+<p>이튼의 저를 보고 싶다고 하셨지요. 망토와 칼라를 한 채로. 키케로를 읽는.</p>
+<p>볼 수 있었으면 좋겠습니다. 그때의 제가 볼 만한 가치가 있어서가 아니라 — 솔직히 엉망이었고, 아마 얼굴에 잉크가 묻어 있었을 테니까 — 다만 만약 당신이 거기 있었다면, 그 끝없는 토론 중에 갤러리에 앉아, 즐거워하지 않는 척하면서 짓는 그 특유의 표정으로 저를 보고 있었다면 —</p>
+<p>가만히 앉아 있을 수 있었을 것 같습니다. 인생에서 처음으로.</p>
+<p>당신이 계속 보고 있게 하려고.</p>
+<p>9일 후에 돌아갑니다. 교쿠로가 너무 기울지 않게 해주십시오. 돌아가면 제가 바로잡겠습니다.</p>
+<p class="closing">당신의 — 이 단어의 모든 의미에서, 아직 말하는 법을 모르는 것들까지 포함하여,<br>이시르 에버레인 피츠앨런</p>
+<p class="ps">추신. 어머니에게 제대로 먹고 있다고 전해주십시오. (아닙니다. 하지만 어쨌든 전해주세요. 거짓말인 줄 아실 테지만, 침묵보다 거짓말을 더 좋아하시거든요. 그것도 당신과 결혼하고 나서야 이해한 것입니다.)</p>
+<p class="ps">추추신. 브리핑 중에 웃지 않았습니다.</p>
+<p class="ps">추추추신. 브리핑 중에 웃었습니다.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function openLetter(){document.getElementById('overlay').classList.add('open');document.body.style.overflow='hidden';}
+  function closeLetter(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+  function switchTab(lang,btn){
+    document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('tab-'+lang).classList.add('active');
+    btn.classList.add('active');
+  }
+  document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeLetter();});
+</script>

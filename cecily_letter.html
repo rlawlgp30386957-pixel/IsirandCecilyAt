@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cecily's Letter — To My Husband</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1208;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .scene {
+    width: 100%;
+    max-width: 680px;
+    min-height: 520px;
+    background: #2a1f0f;
+    background-image:
+      radial-gradient(ellipse at 30% 20%, #3d2b10 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 80%, #1e1508 0%, transparent 60%);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .scene::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      92deg,
+      transparent 0px, transparent 3px,
+      rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px
+    );
+    pointer-events: none;
+  }
+
+  .petal {
+    position: absolute;
+    width: 10px;
+    height: 16px;
+    border-radius: 50% 50% 50% 0;
+    opacity: 0.75;
+    pointer-events: none;
+  }
+
+  .quill {
+    position: absolute;
+    bottom: 60px;
+    right: 80px;
+    width: 8px;
+    height: 120px;
+    transform: rotate(-30deg);
+    transform-origin: bottom center;
+    pointer-events: none;
+  }
+  .quill-shaft {
+    width: 3px;
+    height: 100px;
+    background: linear-gradient(to bottom, #c8a96e, #8b5e2a);
+    margin: 0 auto;
+    border-radius: 2px 2px 0 0;
+    position: relative;
+  }
+  .quill-tip {
+    width: 0;
+    height: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 18px solid #2a1a08;
+    margin: 0 auto;
+  }
+  .quill-barb {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .quill-barb-left, .quill-barb-right {
+    position: absolute;
+    top: 0;
+    width: 28px;
+    height: 60px;
+    border-radius: 0 0 50% 50%;
+    background: linear-gradient(to bottom, rgba(220,200,150,0.9), rgba(200,180,120,0.7));
+  }
+  .quill-barb-left { left: -30px; transform: rotate(12deg); }
+  .quill-barb-right { left: 2px; transform: rotate(-12deg); }
+
+  .inkwell {
+    position: absolute;
+    bottom: 55px;
+    right: 40px;
+    width: 28px;
+    height: 32px;
+    pointer-events: none;
+  }
+  .inkwell-body {
+    width: 28px;
+    height: 24px;
+    background: #1a0f0a;
+    border: 1px solid #3d2010;
+    border-radius: 3px 3px 6px 6px;
+    position: absolute;
+    bottom: 0;
+  }
+  .inkwell-neck {
+    width: 14px;
+    height: 8px;
+    background: #1a0f0a;
+    border: 1px solid #3d2010;
+    border-radius: 2px 2px 0 0;
+    position: absolute;
+    top: 0;
+    left: 7px;
+  }
+  .inkwell-liquid {
+    width: 22px;
+    height: 10px;
+    background: #080408;
+    border-radius: 0 0 5px 5px;
+    position: absolute;
+    bottom: 2px;
+    left: 3px;
+  }
+
+  .envelope-wrapper {
+    position: relative;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.3s ease;
+  }
+  .envelope-wrapper:hover { transform: scale(1.02); }
+
+  .envelope {
+    width: 260px;
+    height: 180px;
+    position: relative;
+  }
+
+  .envelope-body {
+    width: 260px;
+    height: 180px;
+    background: #f0e6cc;
+    border: 1px solid #c8a96e;
+    border-radius: 4px;
+    position: absolute;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+
+  .envelope-flap-bottom-left {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 0 90px 130px;
+    border-color: transparent transparent #e8dac0 transparent;
+    z-index: 2;
+  }
+  .envelope-flap-bottom-right {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 130px 90px 0;
+    border-color: transparent #e8dac0 transparent transparent;
+    z-index: 2;
+  }
+  .envelope-flap-top {
+    position: absolute;
+    top: 0; left: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 95px 130px 0 130px;
+    border-color: #ddd0b0 transparent transparent transparent;
+    z-index: 3;
+  }
+
+  .wax-seal {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: 52px; height: 52px;
+  }
+  .seal-outer {
+    width: 52px; height: 52px;
+    background: radial-gradient(circle at 40% 35%, #c0392b, #8b1a1a);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.15);
+  }
+  .seal-inner {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,200,180,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .seal-monogram {
+    font-family: 'IM Fell English', serif;
+    font-size: 11px;
+    color: rgba(255,230,210,0.9);
+    line-height: 1;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+  .seal-line {
+    width: 20px;
+    height: 0.5px;
+    background: rgba(255,200,180,0.5);
+    margin: 2px 0;
+  }
+
+  .envelope-label {
+    position: absolute;
+    bottom: 18px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'IM Fell English', serif;
+    font-size: 11px;
+    color: #6b4c1e;
+    white-space: nowrap;
+    z-index: 5;
+    opacity: 0.8;
+    letter-spacing: 0.5px;
+  }
+
+  .click-hint {
+    position: absolute;
+    bottom: -28px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: rgba(210,185,140,0.7);
+    white-space: nowrap;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+
+  /* Letter overlay */
+  .letter-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20,12,5,0.88);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .letter-overlay.open { display: flex; }
+
+  .letter-paper {
+    width: min(580px, 100%);
+    max-height: 85vh;
+    background: #faf6ec;
+    background-image: linear-gradient(rgba(180,150,100,0.08) 1px, transparent 1px);
+    background-size: 100% 28px;
+    border-radius: 2px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(180,150,100,0.3);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .letter-header {
+    padding: 24px 32px 0;
+    border-bottom: 1px solid rgba(180,150,100,0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f5efe0;
+    border-radius: 2px 2px 0 0;
+    flex-shrink: 0;
+  }
+
+  .tab-btn {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: #7a5c2a;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 4px 4px 0 0;
+    opacity: 0.6;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .tab-btn.active {
+    background: #faf6ec;
+    opacity: 1;
+    color: #4a3010;
+    border: 1px solid rgba(180,150,100,0.2);
+    border-bottom-color: #faf6ec;
+    margin-bottom: -1px;
+  }
+
+  .close-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #7a5c2a;
+    cursor: pointer;
+    padding: 4px 8px;
+    opacity: 0.7;
+    font-family: serif;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .close-btn:hover { opacity: 1; }
+
+  .letter-body {
+    overflow-y: auto;
+    padding: 28px 36px 36px;
+    flex: 1;
+  }
+  .letter-body::-webkit-scrollbar { width: 4px; }
+  .letter-body::-webkit-scrollbar-track { background: transparent; }
+  .letter-body::-webkit-scrollbar-thumb { background: rgba(180,150,100,0.3); border-radius: 2px; }
+
+  .letter-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16.5px;
+    line-height: 1.85;
+    color: #2c1f0a;
+  }
+  .letter-text p { margin-bottom: 0.9em; }
+  .letter-text .salutation { font-style: italic; font-size: 18px; margin-bottom: 1.2em; color: #3d2510; }
+  .letter-text .closing { margin-top: 1.4em; font-style: italic; }
+  .letter-text .ps { margin-top: 1em; font-size: 15px; color: #5a3a18; font-style: italic; }
+  .letter-text em { font-style: italic; }
+
+  .letter-tab { display: none; }
+  .letter-tab.active { display: block; }
+
+  .lang-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    color: rgba(120,90,40,0.5);
+    text-align: right;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="scene" id="scene">
+
+  <!-- Petals -->
+  <div class="petal" style="background:#f4c842; top:22%; left:12%; transform:rotate(20deg);"></div>
+  <div class="petal" style="background:#f0b830; top:35%; left:8%; transform:rotate(-15deg); width:8px; height:13px;"></div>
+  <div class="petal" style="background:#f5d060; top:18%; left:18%; transform:rotate(60deg); width:7px; height:12px; opacity:0.6;"></div>
+  <div class="petal" style="background:#f4c842; top:72%; left:15%; transform:rotate(-40deg);"></div>
+  <div class="petal" style="background:#eec030; top:80%; left:22%; transform:rotate(10deg); width:9px;"></div>
+  <div class="petal" style="background:#f5d060; top:65%; left:10%; transform:rotate(80deg); width:7px; height:11px; opacity:0.55;"></div>
+  <div class="petal" style="background:#f4c842; top:20%; right:20%; transform:rotate(-25deg);"></div>
+  <div class="petal" style="background:#f0b830; top:28%; right:28%; transform:rotate(45deg); width:8px; opacity:0.65;"></div>
+  <div class="petal" style="background:#f5d060; top:15%; right:15%; transform:rotate(70deg); width:7px; height:13px;"></div>
+  <div class="petal" style="background:#f4c842; top:75%; right:22%; transform:rotate(-60deg); width:9px;"></div>
+  <div class="petal" style="background:#eec030; top:68%; right:12%; transform:rotate(30deg);"></div>
+  <div class="petal" style="background:#f5d060; top:55%; left:5%; transform:rotate(-10deg); width:8px; opacity:0.7;"></div>
+  <div class="petal" style="background:#f4c842; top:44%; right:6%; transform:rotate(55deg); width:7px; height:12px; opacity:0.6;"></div>
+  <div class="petal" style="background:#f0b830; top:88%; left:40%; transform:rotate(-30deg); width:8px;"></div>
+  <div class="petal" style="background:#f5d060; top:10%; left:45%; transform:rotate(15deg); width:7px; opacity:0.55;"></div>
+
+  <!-- Quill -->
+  <div class="quill">
+    <div class="quill-barb">
+      <div class="quill-barb-left"></div>
+      <div class="quill-barb-right"></div>
+    </div>
+    <div class="quill-shaft"></div>
+    <div class="quill-tip"></div>
+  </div>
+
+  <!-- Inkwell -->
+  <div class="inkwell">
+    <div class="inkwell-neck"></div>
+    <div class="inkwell-body">
+      <div class="inkwell-liquid"></div>
+    </div>
+  </div>
+
+  <!-- Envelope -->
+  <div class="envelope-wrapper" onclick="openLetter()" title="봉투를 클릭하여 편지를 펼치세요">
+    <div class="envelope">
+      <div class="envelope-body"></div>
+      <div class="envelope-flap-bottom-left"></div>
+      <div class="envelope-flap-bottom-right"></div>
+      <div class="envelope-flap-top"></div>
+      <div class="wax-seal">
+        <div class="seal-outer">
+          <div class="seal-inner">
+            <div class="seal-monogram">C · E</div>
+            <div class="seal-line"></div>
+            <div class="seal-monogram" style="font-size:8px; letter-spacing:2px;">FITZ</div>
+          </div>
+        </div>
+      </div>
+      <div class="envelope-label">Capt. Isir Everlaine — H.M.S. —</div>
+    </div>
+    <div class="click-hint">✦ 봉투를 눌러 편지를 펼치세요 ✦</div>
+  </div>
+</div>
+
+<!-- Letter overlay -->
+<div class="letter-overlay" id="letterOverlay">
+  <div class="letter-paper">
+    <div class="letter-header">
+      <button class="tab-btn active" onclick="switchTab('en', this)">English</button>
+      <button class="tab-btn" onclick="switchTab('ko', this)">한국어</button>
+      <button class="close-btn" onclick="closeLetter()">✕</button>
+    </div>
+    <div class="letter-body">
+
+      <div class="letter-tab active" id="tab-en">
+        <div class="lang-label">Original · English</div>
+        <div class="letter-text">
+          <p class="salutation">To my husband,</p>
+          <p>I hope this finds you before the sea salt ruins your mood entirely. Though knowing you, the salt probably improves it.</p>
+          <p>London is warm today. The sort of warmth that makes the servants open every window and then immediately regret it, because the street noise comes in with the breeze. Mrs. Pemberton's carriage horse sneezed outside our gate this morning and startled the new footman so badly he dropped the breakfast tray. Father didn't even look up from his paper. I believe he said, <em>"Tell the horse I sympathise."</em></p>
+          <p>The greenhouse is doing beautifully. The second flush is coming along — I've been watching the leaves every morning, and I think we'll have a proper harvest by June. I've started a new section for the Gyokuro seedlings you helped me pot before you left — do you remember? You got soil on your dress uniform and said a word I shall not repeat in writing. They're sprouting. Three of the five. I've named the tallest one after you, because it refuses to grow in the direction I want it to.</p>
+          <p>The freesias are in full bloom. The whole greenhouse smells like spring decided to move in permanently. I saved a few stems for your study — they're in the blue vase on your desk. They'll be dead by the time you read this, of course, but I wanted you to know they were there.</p>
+          <p>Now. To the reason I'm writing three pages instead of my usual two.</p>
+          <p>I had tea with your mother last Thursday.</p>
+          <p>Mrs. Everlaine is a magnificent woman. I say this with complete sincerity and also with the understanding that she could, if she wished, command a fleet more efficiently than half the Admiralty. She told me — over her second cup of Darjeeling, which she takes with exactly one sugar and no milk — that you were, in her words, <em>"the most exhausting child God ever saw fit to inflict upon a respectable household."</em></p>
+          <p>She told me about the pond. The one at the Everlaine country house. Apparently you jumped in fully clothed at the age of seven because you wanted to <em>"see if frogs could be trained."</em> She had to pull you out herself because the groundskeeper was too shocked to move.</p>
+          <p>She told me about the tutor you bit. (You bit a tutor, Isir. A tutor. The man was teaching you Latin.)</p>
+          <p>She told me you ran through the east wing with a wooden sword at age nine and broke a bust of your great-grandfather, Chief Justice Aldric Everlaine. She said your father didn't speak to you for three days. She said you didn't notice.</p>
+          <p>And then she told me — somewhat more quietly — about the morning you left for the Naval Academy. She said she found your acceptance letter hidden inside a volume of Blackstone's Commentaries on your desk. She said she sat in your room for an hour before telling your father.</p>
+          <p>Isir.</p>
+          <p>I find myself terribly curious about something.</p>
+          <p>Your family has produced two Supreme Court Justices. Your father expected you at Eton, then Oxford, then the law. I know you chose differently — I married the result of that choice, and I would not trade him for anything.</p>
+          <p>But I confess — I would very much like to have seen you at Eton. In the cloak and the collar. Reading Cicero, perhaps, or pretending to. I imagine you looked devastating in black, though I suspect the masters found you rather more devastating in the disciplinary sense.</p>
+          <p>Were you proper? Did you speak correctly? Did you sit through lectures without wanting to break something?</p>
+          <p>Or were you exactly as you are now — charging forward without hesitation, even then?</p>
+          <p>I think I know the answer. But I want to hear it from you.</p>
+          <p>Come home soon. The Gyokuro that's named after you is leaning toward the window. I think it's looking for the sea.</p>
+          <p class="closing">Yours,<br>Cecily Helena Fitzalan</p>
+          <p class="ps">P.S. Your mother says to eat properly. She asked me to tell you. I am telling you. Eat properly.</p>
+        </div>
+      </div>
+
+      <div class="letter-tab" id="tab-ko">
+        <div class="lang-label">번역 · 한국어</div>
+        <div class="letter-text">
+          <p class="salutation">남편에게,</p>
+          <p>바다 소금이 당신 기분을 완전히 망치기 전에 이 편지가 도착하길 바라요. 물론 당신을 알고 보면, 소금이 오히려 기분을 좋게 하겠지만요.</p>
+          <p>오늘 런던은 따뜻해요. 시종들이 창문을 다 열었다가 즉시 후회하는 종류의 따뜻함이에요, 바람과 함께 거리 소음이 들어오거든요. 오늘 아침 펨버턴 부인의 마차 말이 우리 대문 앞에서 재채기를 해서 새로 온 하인이 너무 놀라 아침 식사 쟁반을 떨어뜨렸어요. 아버지는 신문에서 눈도 안 떼셨어요. <em>"말에게 공감한다고 전해라"</em>라고 하셨던 것 같아요.</p>
+          <p>유리 정원은 아주 잘 되고 있어요. 두 번째 수확이 자라고 있어요 — 매일 아침 잎을 살피고 있는데, 6월이면 제대로 된 수확을 할 수 있을 것 같아요. 당신이 떠나기 전에 함께 분갈이했던 교쿠로 묘목을 위한 새 구역을 시작했어요 — 기억나요? 정복에 흙을 묻히고는 편지에 옮기지 못할 말을 하셨죠. 싹이 나고 있어요. 다섯 개 중 세 개가요. 제일 큰 건 당신 이름을 붙였어요, 제가 원하는 방향으로 자라길 거부하거든요.</p>
+          <p>프리지아가 활짝 폈어요. 유리 정원 전체에서 봄이 영구 입주하기로 한 것 같은 향이 나요. 당신 서재에 둘 줄기 놓아뒀어요 — 책상 위 파란 꽃병에. 이걸 읽을 때쯤이면 물론 시들어 있겠지만, 거기 있었다는 걸 알아주셨으면 해서요.</p>
+          <p>자. 평소 두 장 대신 세 장을 쓰는 이유를 말씀드릴게요.</p>
+          <p>지난 목요일에 어머님과 차를 마셨어요.</p>
+          <p>에버레인 부인은 대단한 분이세요. 진심으로 말하는 거예요, 그리고 그분이 원하시면 해군성 절반보다 효율적으로 함대를 지휘하실 수 있으리라는 이해와 함께요. 어머님이 말씀하셨어요 — 두 번째 다르질링을 드시며, 설탕 정확히 하나에 우유 없이 — 당신이, 어머님 말씀으로는, <em>"하느님이 점잖은 가정에 내리신 가장 지치게 하는 아이"</em>였다고요.</p>
+          <p>연못 이야기를 해주셨어요. 에버레인 시골 저택에 있는 그 연못. 일곱 살에 옷을 입은 채 뛰어들었다면서요, <em>"개구리를 훈련시킬 수 있는지 보려고."</em> 정원사가 너무 충격받아 움직이지 못해서 어머님이 직접 끌어내셨다고요.</p>
+          <p>가정교사를 물었다는 이야기도요. (가정교사를 물었어요, 이시르. 가정교사를. 그 분은 라틴어를 가르치고 있었는데요.)</p>
+          <p>아홉 살에 나무 칼을 들고 동쪽 별관을 뛰어다니다 증조부 앨드릭 에버레인 대법관의 흉상을 깨뜨렸다고요. 아버님이 사흘간 말을 안 하셨다고. 당신은 못 알아챘다고요.</p>
+          <p>그리고 — 좀 더 조용한 목소리로 — 해군사관학교로 떠나던 아침 이야기를 해주셨어요. 당신 책상 위 블랙스톤 법학 주석서 안에 숨겨둔 합격 통지서를 발견하셨다고. 아버님에게 말씀하시기 전에 당신 방에서 한 시간을 앉아 계셨다고요.</p>
+          <p>이시르.</p>
+          <p>몹시 궁금한 것이 생겼어요.</p>
+          <p>당신 가문은 대법관을 두 분이나 배출했지요. 아버님은 이튼 스쿨, 그다음 옥스퍼드, 그다음 법학을 기대하셨고요. 당신이 다르게 선택했다는 걸 알아요 — 저는 그 선택의 결과와 결혼했고, 무엇과도 바꾸지 않을 거예요.</p>
+          <p>하지만 고백하자면 — 이튼 스쿨의 당신을 보고 싶었을 것 같아요. 망토와 칼라를 한 채로. 키케로를 읽고 있거나, 읽는 척하거나. 검은 옷이 무척 잘 어울렸을 것 같은데, 교사들은 훈육적 의미에서 더 치명적이었을 것 같지만요.</p>
+          <p>바른 태도였나요? 말을 제대로 했나요? 뭔가를 부수고 싶지 않고 강의를 끝까지 앉아 들었나요?</p>
+          <p>아니면 지금과 정확히 똑같았나요 — 그때도, 주저 없이 돌진하는?</p>
+          <p>답을 알 것 같아요. 하지만 당신에게서 듣고 싶어요.</p>
+          <p>빨리 와요. 당신 이름을 붙인 교쿠로가 창문 쪽으로 기울고 있어요. 바다를 찾고 있는 것 같아요.</p>
+          <p class="closing">당신의,<br>세실리 헬레나 피츠앨런</p>
+          <p class="ps">추신. 어머님이 제대로 드시랍니다. 전해달라고 하셨어요. 전하는 거예요. 제대로 드세요.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function openLetter() {
+    document.getElementById('letterOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLetter() {
+    document.getElementById('letterOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function switchTab(lang, btn) {
+    document.querySelectorAll('.letter-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + lang).classList.add('active');
+    btn.classList.add('active');
+  }
+  document.getElementById('letterOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeLetter();
+  });
+</script>
+</body>
+</html>
